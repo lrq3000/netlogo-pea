@@ -1994,6 +1994,10 @@ See the AUX FUNCTIONS part for generic NetLogo functions like ensemble operation
 Note that another implementation in Objective-C of this algorithm by the authors themselves is provided with the article.
 
 * Microbial Genetic Algorithm from: "Microbial Genetic Algorithm", 1996, I. Harvey
+
+## AUTHOR AND LICENSE
+
+Original Pathway Evolution Algorithm by Chrisantha Fernando et al, implemented in NetLogo by Stephen Larroque, opensource licensed under MIT.
 @#$#@#$#@
 default
 true
