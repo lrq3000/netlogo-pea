@@ -8,7 +8,7 @@ globals[
   paths-visu-height layers phenotypes
   layer-width layer-height network-height
   best-phenotypes ; list of best phenotypes to compare to compute the Hamming distance
-  
+
   ; Oscillating Reward
   reward-oscillating-best-allele reward-oscillating-last-switch
 
@@ -59,7 +59,7 @@ end
 to setup-globals
   set paths-visu-height 0.2
   set layers n-layers + 2 ; + 2 for start and end nodes
-  
+
   set best-phenotypes nobody
 
   ; Plot
@@ -143,7 +143,7 @@ to setup-neurons-phenotypes
     if n-rows > length phenotypes [
       error "Too many n-rows for this type of phenotypes! Please lower down the number to 2 maximum"
     ]
-    
+
     ; For each layer/column
     let col n-values (layers - 2) [? + 1]
     foreach col [
@@ -639,7 +639,7 @@ to pea [reward-eval reward-callback] ; reward-eval = "max" or "min", it's how th
 ;      mutate-neuron self
 ;    ]
 ;  ]
-  
+
 end
 
 ; Drop unused synapses (with a too low probability)
@@ -782,7 +782,7 @@ to mutate-neuron [parent-node node child-node]
       ifelse redundancy? or mu-node = nobody [
         ; Compute the y coordinate: try to place the mutated node above first, else place it below the current node
         let mu-layer-height min (list 5 (network-height / (length phenotypes))) ; height of one layer
-        
+
         ; Try to place above if there's not any neuron at this place, else we place below (whether there is already a neuron or not)
         ; TODO: find a better, guaranteed way to place neurons without overlapping
         ;let posx xcor mod world-width
@@ -801,7 +801,7 @@ to mutate-neuron [parent-node node child-node]
           set allele ?
           set mu-node self
         ]
-        
+
         ; Create a link from parent-node to mutated-node (bypassing current node)
         ask parent-node [
           let sylayer my-layer
@@ -811,7 +811,7 @@ to mutate-neuron [parent-node node child-node]
             set color grey
           ]
         ]
-        
+
         ; Create a link from mutated-node to the child-node of current node
         ask mu-node [
           let sylayer my-layer
@@ -825,7 +825,7 @@ to mutate-neuron [parent-node node child-node]
             set color grey
           ]
         ]
-        
+
         ; Normalize the weights
         normalize-parent parent-node
         ; Stop here the foreach
@@ -846,7 +846,7 @@ to mutate-neuron [parent-node node child-node]
             set mutated? true
           ]
         ]
-        
+
         ; Create a link from mutated-node to the child-node of current node
         let c-node child-node
         ; If variable-layers, we will link to any neuron in a subsequent layer, not just the child-node of current node
@@ -864,7 +864,7 @@ to mutate-neuron [parent-node node child-node]
           ]
           set mutated? true
         ]
-        
+
         ; Normalize the weights
         normalize-parent parent-node
         normalize-parent mu-node
@@ -918,7 +918,7 @@ to path-cross-over [winning-paths lost-paths]
       ifelse variable-layers
       [ set win-bridged one-of (winner with [my-layer > [my-layer] of myself and not in-synapse-neighbor? myself]) ] ; variable layers size: we can bridge towards any winning neuron in any layer as long as the layer is greater (after) than the layer of the losing (current) neuron
       [ set win-bridged one-of (winner with [my-layer = [my-layer + 1] of myself and not in-synapse-neighbor? myself]) ] ; fixed layers size: we bridge necessarily to the winning neuron in the directly next layer
-      
+
       ; If no neuron was found (either because there's no layer after when variable-layers is enabled, or either because this losing neuron is already linked to the winning neurons), then we do nothing
       if win-bridged != nobody [
         ; Create the bridge
@@ -1000,9 +1000,9 @@ end
 ; Updates the graph network depending on the winning path(s) and losing path(s) from the last path traversal and tournament selection
 to learning-rule-update [winning-paths lost-paths]
   ; Extract the synapses from the paths
-  let winning-syn list-to-agent-set (flatten-list extract-synapses-from-paths winning-paths) 
+  let winning-syn list-to-agent-set (flatten-list extract-synapses-from-paths winning-paths)
   let lost-syn list-to-agent-set (flatten-list extract-synapses-from-paths lost-paths)
-  
+
   ; Discriminate synapses according to their status: won (on the winning path(s) and not shared by losing path(s)) - shared (between winning and losing path(s)) - lost (else)
   let syn-shared intersection winning-syn lost-syn
   let syn-won difference winning-syn lost-syn
@@ -1141,16 +1141,16 @@ to plot-fitness [pen f-max f-avg]
 
     set pea-avg-moving (pea-avg-moving * pea-avg-moving-n + f-avg) / (pea-avg-moving-n + 1)
     set pea-avg-moving-n pea-avg-moving-n + 1
-    
+
     if ticks >= (pea-moving-last-time + moving-avg-time) [
       set-current-plot "Fitness"
-      
+
       set-current-plot-pen (word pen "-max")
       plot pea-max-moving
-      
+
       set-current-plot-pen (word pen "-avg")
       plot pea-avg-moving
-      
+
       set pea-max-moving 0
       set pea-max-moving-n 0
       set pea-avg-moving 0
@@ -1162,19 +1162,19 @@ to plot-fitness [pen f-max f-avg]
   if pen = "mga" [
     set mga-max-moving (mga-max-moving * mga-max-moving-n + f-max) / (mga-max-moving-n + 1)
     set mga-max-moving-n mga-max-moving-n + 1
-    
+
     set mga-avg-moving (mga-avg-moving * mga-avg-moving-n + f-avg) / (mga-avg-moving-n + 1)
     set mga-avg-moving-n mga-avg-moving-n + 1
-    
+
     if ticks >= (mga-moving-last-time + moving-avg-time) [
       set-current-plot "Fitness"
-      
+
       set-current-plot-pen (word pen "-max")
       plot mga-max-moving
-      
+
       set-current-plot-pen (word pen "-avg")
       plot mga-avg-moving
-      
+
       set mga-max-moving 0
       set mga-max-moving-n 0
       set mga-avg-moving 0
@@ -1186,7 +1186,7 @@ end
 
 to plot-hamming [pen pheno]
   let hamming-dist (hamming-distances-diff best-phenotypes pheno)
-  
+
   set-current-plot "Hamming distance"
   set-current-plot-pen pen
   plotxy ticks hamming-dist
@@ -1228,7 +1228,7 @@ end
 to-report list:pretty-print-recursive [megalist]
   report list:pretty-print-recursive-aux megalist 1
 end
- 
+
 to-report list:pretty-print-recursive-aux [megalist level] ; megalist is a list of listes
   ifelse is-list? megalist and (is-list? item 0 megalist or is-agent? item 0 megalist) [
     let n (length megalist)
@@ -1544,7 +1544,7 @@ INPUTBOX
 130
 110
 n-layers
-5
+2
 1
 0
 Number
@@ -1610,7 +1610,7 @@ CHOOSER
 reward-kind
 reward-kind
 "Random" "Max sum" "Count ones" "Oscillating count" "Disequilibrium separate" "Disequilibrium shift" "Guess-a-number" "Min length"
-6
+1
 
 SLIDER
 5
@@ -1621,7 +1621,7 @@ synapse-initial-weight-on-mutation
 synapse-initial-weight-on-mutation
 0
 1
-0.4
+0.1
 0.05
 1
 NIL
@@ -1633,7 +1633,7 @@ INPUTBOX
 145
 400
 synapse-drop-below-weight
-0.3
+0.05
 1
 0
 Number
@@ -1644,7 +1644,7 @@ INPUTBOX
 265
 400
 neuron-drop-after-time
-5
+0
 1
 0
 Number
@@ -1667,7 +1667,7 @@ SWITCH
 538
 variable-layers
 variable-layers
-0
+1
 1
 -1000
 
@@ -1877,7 +1877,7 @@ SWITCH
 438
 mga-crossover-uniform
 mga-crossover-uniform
-0
+1
 1
 -1000
 
@@ -1895,9 +1895,9 @@ redundancy?
 TEXTBOX
 15
 475
-165
-496
-PEA extensions
+295
+521
+PEA extensions (experimental)
 20
 0.0
 1
@@ -1915,9 +1915,9 @@ TEXTBOX
 TEXTBOX
 140
 500
-360
-545
-<- allows neurons and synapses to create shorter or longer paths than n-layers (by adding or shortcircuiting layers)
+435
+556
+<- allows neurons and synapses to create shorter or longer paths than n-layers (by adding or shortcircuiting layers). Use with reward-kind \"Guess-a-number\" or \"Min-length\".
 11
 0.0
 1
@@ -1925,42 +1925,63 @@ TEXTBOX
 @#$#@#$#@
 ## WHAT IS IT?
 
-Pathway Evolution Algorithm (PEA) by Chrisantha Fernando et al. (2011), implemented in NetLogo 5.0.5 by Stephen Larroque (2014).
+Pathway Evolution Algorithm (PEA) by Chrisantha Fernando et al. (2011), implemented in NetLogo 5.0.5 by Stephen Larroque (2014) and updated to work with NetLogo v5.3.1 (2017).
 
-Also implemented Microbial Genetic Algorithm by I. Harvey (1996) as a comparison (and because PEA is a special case of MGA).
+PEA is a general, minimalist genetic algorithm but with the specificity that the units of evolution are pathways in a network instead of individuals of a population.
 
-This is a general, minimalist genetic algorithm but with the specificity that it works on pathways in a network as units of evolution instead of individuals.
+Also implemented Microbial Genetic Algorithm by I. Harvey (1996) as a comparison (and because PEA is a special case of MGA). MGA is a minimalist genetic algorithm that implements the basic tenets of evolutionary algorithm and can be programmed in one line of C code.
 
-An MGA algorithm was implemented to compare the phenomenons that appears with PEA.
+The MGA algorithm was implemented to compare the phenomenons that appears with PEA.
 
 PEA is NOT meant to be more performant than MGA (even if that's often the case) or any other algorithm, but mostly to demonstrate that some neurobiological phenomenons can naturally emerge from paths in a network, and PEA demonstrate that with a very simple genetic algorithm (since PEA is really just a MGA applied to paths instead of individuals).
 
 ## HOW IT WORKS
 
+Basically it's a minimalistic genetic algorithm (mutation, crossovers) but applied on paths instead of individuals: each path is considered as an individual, so any combination of paths in a network from the Start node to the End node is an individual.
+
+At each iteration, a tournament is done to compare 2 randomly chosen paths, and the one that provides the best flow (ie, the best fit error) is reinforced, and the other one's weights are lowered.
+
+The change of weights is a bit complicated to explain, but we change each link's weight of the winner path by comparing to the loser path: this allows to accelerate the best fit by also keeping what was good in the loser path. See the crossover rules from the code comments or the reference below.
+
 See the sourcecode for a full algorithm summary in the comments.
 
 ## HOW TO USE IT
 
-Select a phenotypes-kind, then a reward-kind, the n-layers (number of layers = number of nodes = length of phenotypes), n-rows (number of distinctive phenotypes on each layer, eg: with phenotypes-kind = Binary, with n-rows = 1 it will initialize with only one row of 0 and 1, if n-rows = 2 there will be two rows with 0 and 1 on each layer).
+Please select:
+* a phenotypes-kind = range of possible values for each node (None, Binary, Integer)
+* a reward-kind = what is the objective to optimize (eg, max sum)
+* n-layers = number of layers = number of nodes per path = length of phenotypes
+* n-rows = number of distinctive phenotypes on each layer = number of "rows" of nodes
+
+Example: with phenotypes-kind = Binary, with n-rows = 1 it will initialize with only one row of 0 and 1, if n-rows = 2 there will be two rows with 0 and 1 on each layer).
 
 Then press Setup and Go to see the network expand, contract and learn how to best optimize the reward-kind you chose given the phenotypes-kind.
 
 ## THINGS TO NOTICE
 
-There are a few neurobiological phenomenons that can be reproduced with this model, like the expansion/contraction (watch the number of nodes and edges in the chart at the right-side), memory (ability to reuse previously expanded edges and nodes, use reward-kind = Oscillating count and set neuron-drop-after-time = 0) and disequilibrium (ability to maintain several equivalent solutions, use reward-kind = Disequilibrium separate or shift and set neuron-drop-after-time = 0).
+There are a few neurobiological phenomenons that can be reproduced with this model, like the expansion/contraction (watch the number of nodes and edges in the chart at the right-side), memory (ability to reuse previously expanded edges and nodes, use reward-kind = "Oscillating count" and set neuron-drop-after-time = 0) and disequilibrium (ability to maintain several equivalent solutions, use reward-kind = Disequilibrium separate or shift and set neuron-drop-after-time = 0).
 
 ## THINGS TO TRY
 
 You can try to play with the parameters (most specifically with synapse-initial-weight-on-mutation, synapse-drop-below-weight and neuron-drop-after-time).
 
 You can also try to enable the (unofficial) extensions of the model:
-- redundancy? will break the phenotype unicity constraint (in the base model, a neuron must have a unique phenotype in its layer: no other neuron in this layer must have the same phenotype), and thus allow for more redundancy since several paths can have the same phenotype. This is may be a fundamental property of neurobiological phenomenons (see Claude Berrou's Turbocodes).
-- variable-layers will allow the network to increase or reduce the number of layers as needed. This allows to find solutions that are beyond the initial n-layers number. Try this with the reward-kind = "Guess-a-number" or "Min length".
+
+* redundancy? will break the phenotype unicity constraint (in the base model, a neuron must have a unique phenotype in its layer: no other neuron in this layer must have the same phenotype), and thus allow for more redundancy since several paths can have the same phenotype. This is may be a fundamental property of neurobiological phenomenons (see Claude Berrou's Turbocodes and Gripon-Berrou Neural Networks, an extension of associative Hopfield memory model).
+* variable-layers will allow the network to increase or reduce the number of layers as needed. This allows to find solutions that are beyond the initial n-layers number. Try this with the reward-kind = "Guess-a-number" or "Min length".
+
+Variable-layers modify the original PEA algorithm's mutation process by adding the following rules:
+
+1. the mutated neuron can be placed randomly on either the current neuron's layer L, or on L + 1 (this allows to increase the path size).
+
+2. the mutated neuron can link to any neuron in a subsequent layer or to the end node directly (thus it doesn't just link to child-neuron at L+1 but any neuron > L). This allows to reduce the path size.
+
+This strategy works well for "Min length" so 2. seems to be correct, but it does not fit well for "Guess-a-number" so the 1. needs another strategy.
 
 ## EXTENDING THE MODEL
 
-- Add more plots.
-- Enhance the variable-layers extension: it works well for "Min length" (reducing the network size) but not so well with "Guess-a-number" (increasing the size to reach the required number to guess).
+* Add more plots.
+* Enhance the variable-layers extension: it works well for "Min length" (reducing the network size) but not so well with "Guess-a-number" (increasing the size to reach the required number to guess).
 
 ## NETLOGO FEATURES
 
@@ -1968,11 +1989,11 @@ See the AUX FUNCTIONS part for generic NetLogo functions like ensemble operation
 
 ## CREDITS AND REFERENCES
 
-- "Evolvable Neuronal Paths: A Novel Basis for Information and Search in the Brain", 2011, Fernando C, Vasas V, Szathmáry E, Husbands P. PLoS ONE 6(8): e23534. doi: 10.1371/journal.pone.0023534
+* Pathway Evolution Algorithm from: "Evolvable Neuronal Paths: A Novel Basis for Information and Search in the Brain", 2011, Fernando C, Vasas V, Szathmáry E, Husbands P. PLoS ONE 6(8): e23534. doi: 10.1371/journal.pone.0023534
 
 Note that another implementation in Objective-C of this algorithm by the authors themselves is provided with the article.
 
-- "Microbial Genetic Algorithm", 1996, I. Harvey
+* Microbial Genetic Algorithm from: "Microbial Genetic Algorithm", 1996, I. Harvey
 @#$#@#$#@
 default
 true
@@ -2280,7 +2301,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.5
+NetLogo 5.3.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
