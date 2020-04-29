@@ -19,6 +19,8 @@ PEA is NOT meant to be more performant than MGA (even if that's often the case) 
 
 See the sourcecode for a full algorithm summary in the comments.
 
+Slides (in french) are available on [Slideshare](https://fr.slideshare.net/lrq3000/pathway-evolution-algorithm-in-netlogo).
+
 ## HOW TO USE IT
 
 Select a phenotypes-kind, then a reward-kind, the n-layers (number of layers = number of nodes = length of phenotypes), n-rows (number of distinctive phenotypes on each layer, eg: with phenotypes-kind = Binary, with n-rows = 1 it will initialize with only one row of 0 and 1, if n-rows = 2 there will be two rows with 0 and 1 on each layer).
@@ -48,7 +50,7 @@ See the AUX FUNCTIONS part for generic NetLogo functions like ensemble operation
 
 ## CREDITS AND REFERENCES
 
-- "Evolvable Neuronal Paths: A Novel Basis for Information and Search in the Brain", 2011, Fernando C, Vasas V, Szathm·ry E, Husbands P. PLoS ONE 6(8): e23534. doi: 10.1371/journal.pone.0023534
+- "Evolvable Neuronal Paths: A Novel Basis for Information and Search in the Brain", 2011, Fernando C, Vasas V, Szathm√°ry E, Husbands P. PLoS ONE 6(8): e23534. doi: 10.1371/journal.pone.0023534
 
 Note that another implementation in Objective-C of this algorithm by the authors themselves is provided with the article.
 
